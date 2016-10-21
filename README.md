@@ -1,4 +1,4 @@
-# Refract
+# Return.Optics
 
 `Return.Optics` is a utility library extending `Return` with `Monocle` making a clean, concise <abbr title="application programming interface">API</abbr> for doing Elm component updates in the context of other updates. Initially it includes helper functions around refraction—the bending of light. Like viewing a straw being inserted into a glass of water, we’ll use a `Lens` to bend our top-level update function into our component update, and when we pull it out, well be left with an unbent `( model, Cmd msg)` of the Elm architecture.
 
