@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "summary": "Extend Return with Monocle's Lenses for fun in the update function",
     "repository": "https://github.com/toastal/return-optics.git",
     "license": "BSD3",
