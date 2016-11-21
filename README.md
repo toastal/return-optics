@@ -94,8 +94,8 @@ import Checkbox.Model as Model
 import Checkbox.Msg as Msg exposing (Msg(CheckMe))
 
 
-checkboxUpdate : Msg -> Model -> ( Model, Cmd Msg )
-checkboxUpdate msg model =
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
     case msg of
         CheckMe bool ->
             { model | checked = bool }
@@ -183,8 +183,8 @@ import Checkbox.Model as Model
 import Checkbox.Msg as Msg exposing (Msg(..))
 
 
-checkboxUpdate : Msg -> Model -> Return Msg Model
-checkboxUpdate msg model =
+update : Msg -> Model -> Return Msg Model
+update msg model =
     Return.singleton model
         |> case msg of
             CheckMe bool ->
