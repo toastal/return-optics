@@ -2,7 +2,9 @@
 
 `Return.Optics` is a utility library extending `Return` with `Monocle` making a clean, concise <abbr title="application programming interface">API</abbr> for doing Elm component updates in the context of other updates. Initially it includes helper functions around refraction—the bending of light. Like viewing a straw being inserted into a glass of water, we’ll use a `Lens` to bend our top-level update function into our component update, and when we pull it out, well be left with an unbent `( model, Cmd msg )` of the Elm architecture.
 
-If that doesn’t make sense, you’re in luck because we’re about to go over an example.
+If you would like a more in-depth read into why, you can read about that on [my blog](https://toast.al/posts/2016-10-20-optical-swordplay-with-components.html).
+
+However, if that’s not your thing and doesn’t make sense, you’re in luck because we’re about to go over an example.
 
 Suppose we have this trivial, toy component and model…
 
@@ -122,12 +124,12 @@ type alias Model =
 
 pageTitle : Lens Model String
 pageTitle =
-    Lens .pageTitle (\p m -> { m | pageTitle = p })
+    Lens .pageTitle <| \p m -> { m | pageTitle = p }
 
 
 checkbox : Lens Model Checkbox.Model
 checkbox =
-    Lens .checkbox (\c m -> { m | checkbox = c })
+    Lens .checkbox <| \c m -> { m | checkbox = c }
 ```
 
 ```elm
@@ -143,7 +145,7 @@ type alias Model =
 
 checked : Lens Model Bool
 checked =
-    Lens .checked (\c m -> { m | checked = c })
+    Lens .checked <| \c m -> { m | checked = c }
 ```
 
 ```elm
@@ -192,4 +194,3 @@ update msg model =
 ```
 
 
-If you would like a more in-depth read into why, you can read about that on [my blog](https://toast.al/posts/2016-10-20-optical-swordplay-with-components.html).

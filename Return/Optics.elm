@@ -5,6 +5,13 @@ module Return.Optics exposing (refractl, refracto)
 `Monocle` making a clean, concise API for doing Elm component updates
 in the context of other updates.
 
+It the signatures
+
+- `pmod` is Parent Model
+- `pmsg` is Parent Msg
+- `cmod` is Child Model
+- `cmsg` is Child Msg
+
 
 @docs refractl, refracto
 -}
@@ -27,12 +34,12 @@ the message back along a parent return in the update function.
                     MyComponent.update msg
 
 -}
-refractl : Lens a b -> (d -> c) -> (b -> Return d b) -> ReturnF c a
-refractl l mergeBack fx ( a, c ) =
-    l.get a
+refractl : Lens pmod cmod -> (cmsg -> pmsg) -> (cmod -> Return cmsg cmod) -> ReturnF pmsg pmod
+refractl lens mergeBack fx ( model, cmd ) =
+    lens.get model
         |> fx
-        >> Return.mapBoth mergeBack (flip l.set a)
-        >> Return.command c
+        |> Return.mapBoth mergeBack (flip lens.set model)
+        |> Return.command cmd
 
 
 {-| Refract in a component's update via an `Optional` and a way to merge
@@ -47,11 +54,11 @@ getter returns `Nothing` then the `Return` will not be modified.
                 refracto Model.myComponent MyComponentMsg <|
                     MyComponent.update msg
 -}
-refracto : Optional a b -> (d -> c) -> (b -> Return d b) -> ReturnF c a
-refracto o mergeBack fx (( a, c ) as ret) =
-    o.getOption a
-        |> Maybe.unwrap ret
+refracto : Optional pmod cmod -> (cmsg -> pmsg) -> (cmod -> Return cmsg cmod) -> ReturnF pmsg pmod
+refracto opt mergeBack fx (( model, cmd ) as return) =
+    opt.getOption model
+        |> Maybe.unwrap return
             (fx
-                >> Return.mapBoth mergeBack (flip o.set a)
-                >> Return.command c
+                >> Return.mapBoth mergeBack (flip opt.set model)
+                >> Return.command cmd
             )
