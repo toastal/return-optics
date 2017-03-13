@@ -16,7 +16,6 @@ It the signatures
 @docs refractl, refracto
 -}
 
-import Maybe.Extra as Maybe
 import Monocle.Lens exposing (Lens)
 import Monocle.Optional exposing (Optional)
 import Return exposing (Return, ReturnF)
@@ -57,8 +56,9 @@ getter returns `Nothing` then the `Return` will not be modified.
 refracto : Optional pmod cmod -> (cmsg -> pmsg) -> (cmod -> Return cmsg cmod) -> ReturnF pmsg pmod
 refracto opt mergeBack fx (( model, cmd ) as return) =
     opt.getOption model
-        |> Maybe.unwrap return
+        |> Maybe.map
             (fx
                 >> Return.mapBoth mergeBack (flip opt.set model)
                 >> Return.command cmd
             )
+        |> Maybe.withDefault return
