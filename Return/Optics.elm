@@ -25,7 +25,7 @@ The signatures abbreviations
 @docs refractl, refracto
 -}
 
-import Monocle.Lens as Lens exposing (Lens)
+import Monocle.Lens exposing (Lens)
 import Monocle.Optional exposing (Optional)
 import Return exposing (Return, ReturnF)
 import Tuple
@@ -33,16 +33,16 @@ import Tuple
 
 {-| `Lens` to the model, the first element of the `Return` tuple.
 -}
-modell : Lens (Return model x) model
+modell : Lens (Return x model) model
 modell =
-    Lens Tuple.first Tuple.mapFirst
+    Lens Tuple.first (always >> Tuple.mapFirst)
 
 
 {-| `Lens` to the msg, the second element of the `Return` tuple.
 -}
-msgl : Lens (Return x msg) msg
+msgl : Lens (Return msg x) (Cmd msg)
 msgl =
-    Lens Tuple.second Tuple.mapSecond
+    Lens Tuple.second (always >> Tuple.mapSecond)
 
 
 {-| Refract in a component's update via a `Lens` and a way to merge
