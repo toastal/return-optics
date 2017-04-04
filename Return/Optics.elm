@@ -1,24 +1,48 @@
-module Return.Optics exposing (refractl, refracto)
+module Return.Optics
+    exposing
+        ( modell
+        , msgl
+        , refractl
+        , refracto
+        )
 
 {-|
 `Return.Optics` is a utility library extending `Return` with
 `Monocle` making a clean, concise API for doing Elm component updates
 in the context of other updates.
 
-It the signatures
+The signatures abbreviations
 
 - `pmod` is Parent Model
 - `pmsg` is Parent Msg
 - `cmod` is Child Model
 - `cmsg` is Child Msg
 
+# Optics
+@docs modell, msgl
 
+# Utilities
 @docs refractl, refracto
 -}
 
-import Monocle.Lens exposing (Lens)
+import Monocle.Lens as Lens exposing (Lens)
 import Monocle.Optional exposing (Optional)
 import Return exposing (Return, ReturnF)
+import Tuple
+
+
+{-| `Lens` to the model, the first element of the `Return` tuple.
+-}
+modell : Lens (Return model x) model
+modell =
+    Lens Tuple.first Tuple.mapFirst
+
+
+{-| `Lens` to the msg, the second element of the `Return` tuple.
+-}
+msgl : Lens (Return x msg) msg
+msgl =
+    Lens Tuple.second Tuple.mapSecond
 
 
 {-| Refract in a component's update via a `Lens` and a way to merge
