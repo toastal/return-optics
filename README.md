@@ -122,14 +122,14 @@ type alias Model =
     }
 
 
-pageTitle : Lens Model String
-pageTitle =
-    Lens .pageTitle <| \p m -> { m | pageTitle = p }
+pageTitlel : Lens Model String
+pageTitlel =
+    Lens .pageTitle (\p m -> { m | pageTitle = p })
 
 
-checkbox : Lens Model Checkbox.Model
-checkbox =
-    Lens .checkbox <| \c m -> { m | checkbox = c }
+checkboxl : Lens Model Checkbox.Model
+checkboxl =
+    Lens .checkbox (\c m -> { m | checkbox = c })
 ```
 
 ```elm
@@ -143,9 +143,9 @@ type alias Model =
     }
 
 
-checked : Lens Model Bool
-checked =
-    Lens .checked <| \c m -> { m | checked = c }
+checkedl : Lens Model Bool
+checkedl =
+    Lens .checked (\c m -> { m | checked = c })
 ```
 
 ```elm
@@ -159,23 +159,22 @@ import Msg exposing (Msg(TitleChange, CheckboxMsg))
 
 
 update : Msg -> Model -> Return Msg Cmd
-update msg model =
+update msg =
     let
         cmdWeAlwaysDo : Cmd Msg
         cmdWeAlwaysDo =
             -- insert a real command in a non-toy app
             Cmd.none
     in
-        Return.singleton model
-            |> Return.command cmdWeAlwaysDo
-            |> case msg of
+        Return.singleton
+            >> Return.command cmdWeAlwaysDo
+            >> case msg of
                 TitleChange title ->
-                    Return.map <| .set Model.pageTitle title
+                    Return.map (.set Model.pageTitlel title)
 
                 -- Note how much more condensed this part is
                 CheckboxMsg cbMsg ->
-                    refractl Model.checkbox CheckboxMsg <|
-                      Checkbox.update cbMsg
+                    refractl Model.checkboxl CheckboxMsg (Checkbox.update cbMsg)
 ```
 
 ```elm
@@ -186,11 +185,11 @@ import Checkbox.Msg as Msg exposing (Msg(..))
 
 
 update : Msg -> Model -> Return Msg Model
-update msg model =
-    Return.singleton model
-        |> case msg of
+update msg =
+    Return.singleton
+        >> case msg of
             CheckMe bool ->
-                Return.map <| .set Model.checked = bool
+                Return.map (.set Model.checkedl bool)
 ```
 
 
